@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+
 import Menu from './Menu';
 import MenuItem from './MenuItem';
 import SubMenuHeading from './SubMenuHeading';
+import Icon from '../common/Icon';
 
 function SubMenu({ space, children }) {
   const [displayMenu, toggleMenuDisplay] = useState(false);
@@ -36,7 +37,7 @@ function SubMenu({ space, children }) {
           {pages}
           <MenuItem fitted={true}>
             <Link to={`/${space.space_title}/${space.space_id}/new`}>
-              <Icon className="fas fa-plus" />
+              <Icon className="fas fa-plus" margin="right" />
               new page
             </Link>
           </MenuItem>
@@ -45,9 +46,5 @@ function SubMenu({ space, children }) {
     </MenuItem>
   );
 }
-
-const Icon = styled.i`
-  margin-right: 0.5rem;
-`;
 
 export default SubMenu;

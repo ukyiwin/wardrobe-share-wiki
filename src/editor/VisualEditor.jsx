@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import EditorControls from './EditorControls';
 import { Editor as Input, RichUtils } from 'draft-js';
 import isSoftNewlineEvent from 'draft-js/lib/isSoftNewlineEvent';
-import { HANDLED, NOT_HANDLED } from '../const';
-import TextAreaStyle from './TextArea';
+import TextAreaStyle from '../common/TextArea';
 
 const styleMap = {
   CODE: {
@@ -29,9 +28,9 @@ function VisualEditor({ editorState, setEditor }) {
   const handleReturn = e => {
     if (isSoftNewlineEvent(e)) {
       setEditor(RichUtils.insertSoftNewline(editorState));
-      return HANDLED;
+      return 'handled';
     }
-    return NOT_HANDLED;
+    return 'not_handled';
   };
 
   return (
@@ -56,8 +55,6 @@ function VisualEditor({ editorState, setEditor }) {
 }
 
 const InputContainer = styled.div`
-  border: ${({ theme }) => `1px solid ${theme.color.primary}`};
-  color: ${({ theme }) => theme.color.text};
   ${TextAreaStyle}
 `;
 

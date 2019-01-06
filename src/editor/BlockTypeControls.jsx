@@ -1,6 +1,6 @@
 import React from 'react';
 import EditorControlButton from './EditorControlButton';
-import EditorControlIcon from './EditorControlIcon';
+import Icon from '../common/Icon';
 
 const BLOCK_TYPES = [
   { label: 'H1', style: 'header-one' },
@@ -33,7 +33,7 @@ function BlockTypeControls({ handleToggleBlockType, editorState }) {
         }}
         active={style === blockType}
       >
-        {label.icon ? <EditorControlIcon className={label.icon} /> : label}
+        {label.icon ? <Icon className={label.icon} fontSize="1.2rem" /> : label}
       </EditorControlButton>
     );
   });

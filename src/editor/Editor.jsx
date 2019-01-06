@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+
 import EditorTabs from './EditorTabs';
-import Button from '../Button';
 import VisualEditor from './VisualEditor';
 import MarkdownEditor from './MarkdownEditor';
-import TitleInput from './TitleInput';
-import PageHeader from '../PageHeader';
+import TitleInput from '../common/TitleInput';
+import PageHeader from '../common/PageHeader';
+import Button from '../common/Button';
+
+import { TITLE_INPUT_CHAR_LIMIT } from '../const';
 
 function WikiPageEditor(props) {
   const [tab, setTab] = useState('VISUAL');
@@ -19,6 +22,8 @@ function WikiPageEditor(props) {
         placeholder="Title"
         value={title}
         onChange={({ target: { value } }) => setTitle(value)}
+        maxlength={TITLE_INPUT_CHAR_LIMIT}
+        big
       />
       <EditorTabs tab={tab} setTab={setTab} />
       {tab === 'VISUAL' && (
@@ -39,7 +44,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-y: none;
 `;
 
 export default WikiPageEditor;

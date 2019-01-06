@@ -1,45 +1,46 @@
 import React, { useState, useContext } from 'react';
 import { EditorState } from 'draft-js';
-import Editor from './Editor';
-import styled from 'styled-components';
 import { withRouter } from 'react-router';
-import { convertDraftToJSON } from '../utils';
+
+import Editor from './Editor';
+
 import { MenuStateContext } from '../MenuStateContext';
 import { createPage } from '../api';
+import { convertDraftToJSON, handleError } from '../utils';
 
-function WikiPageEditor({ match, history }) {
+function WikiPageEditor({ match, history, setError }) {
   const [editorState, setEditor] = useState(EditorState.createEmpty());
   const [title, setTitle] = useState('');
+  const { dispatch } = useContext(MenuStateContext);
+
   const { space_title } = match.params;
   const space_id = parseInt(match.params.space_id, 10);
-  const { dispatch } = useContext(MenuStateContext);
 
   const handlePublish = async () => {
     const content = convertDraftToJSON(editorState.getCurrentContent());
+    // set title if, user has left it blank
     const newTitle = !title ? 'no-title' : title;
-    const id = await createPage({ title: newTitle, content, space_id });
-    await dispatch({
-      type: 'CREATE_PAGE',
-      payload: { title: newTitle, space_id, id }
-    });
-    history.push(`/${space_title}/${space_id}/${newTitle}/${id}`);
+    try {
+      const id = await createPage({ title: newTitle, content, space_id });
+      await dispatch({
+        type: 'CREATE_PAGE',
+        payload: { title: newTitle, space_id, id }
+      });
+      history.push(`/${space_title}/${space_id}/${newTitle}/${id}`);
+    } catch {
+      handleError(setError);
+    }
   };
+
   return (
-    <Container>
-      <Editor
-        handlePublish={handlePublish}
-        editorState={editorState}
-        setEditor={setEditor}
-        title={title}
-        setTitle={setTitle}
-      />
-    </Container>
+    <Editor
+      handlePublish={handlePublish}
+      editorState={editorState}
+      setEditor={setEditor}
+      title={title}
+      setTitle={setTitle}
+    />
   );
 }
-
-const Container = styled.div`
-  width: 100%;
-  padding: 2rem 3rem;
-`;
 
 export default withRouter(WikiPageEditor);

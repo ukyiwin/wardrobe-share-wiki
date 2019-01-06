@@ -1,12 +1,18 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+
 import SubMenuEditor from './SubMenuEditor';
+import Icon from '../common/Icon';
+import Alert from '../common/Alert';
+
 import { MenuStateContext } from '../MenuStateContext';
 import { updateSpace, deleteSpace } from '../api';
+import { handleError } from '../utils';
 
 function SubMenuHeading({ displayMenu, space, toggleMenuDisplay }) {
   const { space_id, space_title } = space;
   const [inEditMode, setEditMode] = useState(false);
+  const [error, setError] = useState(false);
   const { dispatch } = useContext(MenuStateContext);
 
   const enterEditMode = e => {
@@ -20,20 +26,28 @@ function SubMenuHeading({ displayMenu, space, toggleMenuDisplay }) {
 
   const handleDelete = async e => {
     e.stopPropagation();
-    await deleteSpace(space_id);
-    dispatch({
-      type: 'DELETE_SPACE',
-      payload: { space_id }
-    });
+    try {
+      await deleteSpace(space_id);
+      dispatch({
+        type: 'DELETE_SPACE',
+        payload: { space_id }
+      });
+    } catch {
+      handleError(setError);
+    }
   };
 
   const handleSubmit = async title => {
-    await updateSpace({ title, space_id });
-    dispatch({
-      type: 'UPDATE_SPACE',
-      payload: { space_id, space_title: title }
-    });
-    exitEditMode();
+    try {
+      await updateSpace({ title, space_id });
+      dispatch({
+        type: 'UPDATE_SPACE',
+        payload: { space_id, space_title: title }
+      });
+      exitEditMode();
+    } catch {
+      handleError(setError);
+    }
   };
 
   const iconClass = displayMenu ? 'angle-down' : 'angle-right';
@@ -46,23 +60,27 @@ function SubMenuHeading({ displayMenu, space, toggleMenuDisplay }) {
           handleOnBlur={exitEditMode}
           handleSubmit={handleSubmit}
           display={inEditMode}
+          error={error}
         />
       )}
       {!inEditMode && (
-        <Container onClick={toggleMenuDisplay}>
-          <span>
-            <Icon className={`fas fa-${iconClass}`} margin="0 0.5rem 0 0 " />
-            {space_title}
-          </span>
-          <Right className="right">
-            <Icon
-              className="fas fa-pencil-alt"
-              onClick={enterEditMode}
-              margin="0 0.5rem 0 0 "
-            />
-            <Icon className="fas fa-trash-alt" onClick={handleDelete} />
-          </Right>
-        </Container>
+        <>
+          <Container onClick={toggleMenuDisplay}>
+            <span>
+              <Icon className={`fas fa-${iconClass}`} margin="right" />
+              {space_title}
+            </span>
+            <Right className="right">
+              <Icon
+                className="fas fa-pencil-alt"
+                onClick={enterEditMode}
+                margin="right"
+              />
+              <Icon className="fas fa-trash-alt" onClick={handleDelete} />
+            </Right>
+          </Container>
+          {error && <Alert>Oh no! An error occured!</Alert>}
+        </>
       )}
     </>
   );
@@ -79,10 +97,6 @@ const Container = styled.span`
   &:hover ${Right} {
     visibility: visible;
   }
-`;
-
-const Icon = styled.i`
-  margin: ${({ margin }) => margin};
 `;
 
 export default SubMenuHeading;

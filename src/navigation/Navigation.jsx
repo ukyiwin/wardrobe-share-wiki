@@ -1,18 +1,27 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+
 import Menu from './Menu';
 import SubMenu from './SubMenu';
 import NewSubMenu from './NewSubMenu';
+import Alert from '../common/Alert';
+
 import { MenuStateContext } from '../MenuStateContext';
 import { loadMenu } from '../api';
+import { handleError } from '../utils';
 
 function Navigation() {
   const { state, dispatch } = useContext(MenuStateContext);
+  const [error, setError] = useState(false);
 
   const fetchMenu = async () => {
-    const menu = await loadMenu();
-    dispatch({ type: 'LOAD_MENU', payload: { menu } });
+    try {
+      const menu = await loadMenu();
+      dispatch({ type: 'LOAD_MENU', payload: { menu } });
+    } catch {
+      handleError(setError);
+    }
   };
 
   useEffect(() => {
@@ -28,6 +37,7 @@ function Navigation() {
         <Link to="/">Wardrobe Share Ltd.</Link>
       </Title>
       <Menu>
+        {error && <Alert>Oh no! An error occured!</Alert>}
         {menuItems}
         <NewSubMenu />
       </Menu>

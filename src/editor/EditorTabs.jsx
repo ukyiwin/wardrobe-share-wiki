@@ -22,13 +22,14 @@ const Container = styled.div`
 `;
 
 const Tab = styled.label`
+  margin-top: 0.8rem;
+  padding: 0.5rem 1rem;
+  border: ${({ theme }) => `1px solid ${theme.color.primary}`};
+  border-bottom: none;
   background-color: ${({ theme, active }) =>
     active ? theme.color.primary : theme.color.background};
   color: ${({ theme, active }) =>
     active ? theme.color.background : theme.color.primary};
-  padding: 0.5rem 1rem;
-  border: ${({ theme }) => `1px solid ${theme.color.primary}`};
-  border-bottom: none;
   cursor: pointer;
   transition: 0.2s;
 `;

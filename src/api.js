@@ -7,7 +7,7 @@ export const loadMenu = async () => {
     );
     return response.data;
   } catch {
-    return null;
+    throw new Error();
   }
 };
 
@@ -19,7 +19,7 @@ export const createSpace = async title => {
     );
     return response.data.id;
   } catch {
-    return null;
+    throw new Error();
   }
 };
 
@@ -29,7 +29,7 @@ export const updateSpace = async ({ space_id, title }) => {
       title
     });
   } catch {
-    return null;
+    throw new Error();
   }
 };
 
@@ -39,7 +39,7 @@ export const deleteSpace = async space_id => {
       `${process.env.REACT_APP_ENDPOINT}/spaces/${space_id}`
     );
   } catch {
-    return null;
+    throw new Error();
   }
 };
 
@@ -50,7 +50,7 @@ export const loadPages = async () => {
     );
     return response.data;
   } catch {
-    return null;
+    throw new Error();
   }
 };
 
@@ -61,7 +61,7 @@ export const loadPage = async id => {
     );
     return response.data[0];
   } catch {
-    return null;
+    throw new Error();
   }
 };
 
@@ -77,7 +77,7 @@ export const createPage = async ({ title, content, space_id }) => {
     );
     return response.data.id;
   } catch {
-    return null;
+    throw new Error();
   }
 };
 
@@ -88,7 +88,7 @@ export const updatePage = async ({ id, title, content, space_id }) => {
       content
     });
   } catch {
-    return null;
+    throw new Error();
   }
 };
 
@@ -96,6 +96,6 @@ export const deletePage = async id => {
   try {
     await Axios.delete(`${process.env.REACT_APP_ENDPOINT}/wikipages/${id}`);
   } catch {
-    return null;
+    throw new Error();
   }
 };

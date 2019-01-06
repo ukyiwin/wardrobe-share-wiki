@@ -1,17 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
+import TitleInput from '../common/TitleInput';
+import Icon from '../common/Icon';
+import Alert from '../common/Alert';
+
+import { TITLE_INPUT_CHAR_LIMIT } from '../const';
+
 function SubMenuEditor({
   handleSubmit,
   initialValue = '',
   handleOnBlur,
-  display
+  display,
+  error
 }) {
   const [title, setTitle] = useState(initialValue);
   const inputEl = useRef(null);
 
   useEffect(() => {
     inputEl.current.select();
+    // clear title when component unmounts
+    return () => setTitle('');
   }, []);
 
   const handleKeyChange = e => {
@@ -24,21 +33,28 @@ function SubMenuEditor({
     e.preventDefault();
     e.stopPropagation();
     handleSubmit(title);
-    setTitle('');
   };
 
   return (
-    <InputContainer onClick={e => e.stopPropagation()}>
-      <Input
-        ref={inputEl}
-        placeholder="Space name"
-        onKeyPress={handleKeyChange}
-        value={title}
-        onChange={({ target: { value } }) => setTitle(value)}
-        onBlur={handleOnBlur}
-      />
-      <Icon className="fas fa-arrow-alt-circle-right" onMouseDown={onSubmit} />
-    </InputContainer>
+    <>
+      <InputContainer onClick={e => e.stopPropagation()}>
+        <TitleInput
+          ref={inputEl}
+          placeholder="Space name"
+          onKeyPress={handleKeyChange}
+          value={title}
+          onChange={({ target: { value } }) => setTitle(value)}
+          onBlur={handleOnBlur}
+          maxlength={TITLE_INPUT_CHAR_LIMIT}
+        />
+        <Icon
+          className="fas fa-arrow-alt-circle-right"
+          onMouseDown={onSubmit}
+          margin="left"
+        />
+      </InputContainer>
+      {error && <Alert>Oh no! An error occured!</Alert>}
+    </>
   );
 }
 
@@ -46,18 +62,7 @@ const InputContainer = styled.div`
   display: flex;
   align-items: center;
   font-size: 1rem;
-`;
-
-const Icon = styled.i`
-  margin-left: 0.5rem;
-`;
-
-const Input = styled.input`
-  flex: 1 1 0;
-  height: 1.5rem;
-  font-size: 1rem;
-  color: ${({ theme }) => theme.color.text};
-  outline: none;
+  justify-content
 `;
 
 export default SubMenuEditor;

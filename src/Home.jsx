@@ -1,31 +1,40 @@
 import React, { useState, useEffect, useContext } from 'react';
-import PageHeader from './PageHeader';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { MenuStateContext } from './MenuStateContext';
-import { convertJSONtoPlainText } from './utils';
-import { loadPages } from './api';
 
-function Home() {
+import PageHeader from './common/PageHeader';
+
+import { convertJSONtoPlainText, convertUTCToReadable } from './utils';
+import { loadPages } from './api';
+import { handleError } from './utils';
+
+function Home({ setError }) {
   const [pages, setPages] = useState([]);
   const { state } = useContext(MenuStateContext);
 
   const fetchPages = async id => {
-    const response = await loadPages(id);
-    setPages(response);
+    try {
+      const response = await loadPages(id);
+      setPages(response);
+    } catch {
+      handleError(setError);
+    }
   };
 
-  //fetch new pages everytime the state updates
   useEffect(
     () => {
       fetchPages();
     },
+    //fetch new pages every time the state updates
     [state]
   );
 
   const pagesList = pages.map((page, i) => {
     const { id, title, content, updated_at, space_title, space_id } = page;
     const summary = convertJSONtoPlainText(content);
+    const readableDate = convertUTCToReadable(updated_at);
+
     return (
       <Link key={i} to={`/${space_title}/${space_id}/${title}/${id}`}>
         <PostContainer>
@@ -33,29 +42,22 @@ function Home() {
             {space_title} > {title}
           </PageTitle>
           <Content>{summary}</Content>
-          <small>last updated: {updated_at}</small>
+          <small>last updated: {readableDate}</small>
         </PostContainer>
       </Link>
     );
   });
+
   return (
-    <Container>
+    <>
       <PageHeader>
         <h1>RECENT ARTICLES</h1>
       </PageHeader>
       {pagesList}
-    </Container>
+    </>
   );
 }
 export default Home;
-
-const Container = styled.div`
-  padding: 2rem 3rem;
-  color: ${({ theme }) => theme.color.text};
-  width: 100%;
-  height: 100vh;
-  overflow-y: auto;
-`;
 
 const PageTitle = styled.h3`
   margin-bottom: 0.8rem;

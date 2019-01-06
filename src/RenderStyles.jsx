@@ -8,7 +8,8 @@ const styles = {
   }
 };
 
-const addBreaklines = children => children.map(child => [child, <br />]);
+const addBreaklines = children =>
+  children.map((child, index) => [child, <br key={index} />]);
 
 const renderers = {
   inline: {
@@ -24,9 +25,12 @@ const renderers = {
   blocks: {
     unstyled: (children, { keys }) =>
       children.map((child, index) => <p key={keys[index]}>{child}</p>),
-    blockquote: children => (
-      <blockquote className="blockquote">{addBreaklines(children)}</blockquote>
-    ),
+    blockquote: (children, { keys }) =>
+      children.map((child, index) => (
+        <blockquote key={keys[index]} className="blockquote">
+          {addBreaklines(child)}
+        </blockquote>
+      )),
     'header-one': (children, { keys }) =>
       children.map((child, index) => <h1 key={keys[index]}>{child}</h1>),
     'header-two': (children, { keys }) =>

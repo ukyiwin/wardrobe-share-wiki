@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import EditorControlButton from './EditorControlButton';
-import EditorControlIcon from './EditorControlIcon';
+import Icon from '../common/Icon';
 
 const INLINE_STYLES = [
   { label: { icon: 'fas fa-bold' }, style: 'BOLD' },
@@ -24,16 +24,16 @@ function InlineStyleControls({ handleToggleInlineStyle, editorState }) {
         }}
       >
         {label.icon ? (
-          <EditorControlIcon className={label.icon} />
+          <Icon className={label.icon} fontSize="1rem" />
         ) : (
-          <Mono>{label}</Mono>
+          <MonoButton>{label}</MonoButton>
         )}
       </EditorControlButton>
     );
   });
 }
 
-const Mono = styled.span`
+const MonoButton = styled.span`
   font-family: ${({ theme }) => theme.font.tertiary};
 `;
 

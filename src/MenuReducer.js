@@ -1,4 +1,4 @@
-const initialState = { menu: [], pageFocus: null };
+const initialState = { menu: [], error: false };
 
 function pagesReducer(state, action) {
   switch (action.type) {

@@ -1,24 +1,32 @@
 import React, { useState, useContext } from 'react';
-import styled from 'styled-components';
+
 import MenuItem from './MenuItem';
 import SubMenuEditor from './SubMenuEditor';
+import Icon from '../common/Icon';
+
 import { MenuStateContext } from '../MenuStateContext';
 import { createSpace } from '../api';
+import { handleError } from '../utils';
 
 function NewSubMenu() {
   const [inEditMode, setEditMode] = useState(false);
+  const [error, setError] = useState(false);
+  const { dispatch } = useContext(MenuStateContext);
+
   const exitEditMode = () => {
     setEditMode(false);
   };
-  const { dispatch } = useContext(MenuStateContext);
 
   const handleSubmit = async title => {
-    const space_id = await createSpace(title);
-    dispatch({
-      type: 'CREATE_SPACE',
-      payload: { space_title: title, space_id }
-    });
-    exitEditMode();
+    try {
+      const space_id = await createSpace(title);
+      dispatch({
+        type: 'CREATE_SPACE',
+        payload: { space_title: title, space_id }
+      });
+    } catch {
+      handleError(setError);
+    }
   };
 
   return (
@@ -29,7 +37,7 @@ function NewSubMenu() {
             setEditMode(true);
           }}
         >
-          <Icon className="fas fa-plus" padding="0 0.5rem 0 0" />
+          <Icon className="fas fa-plus" margin="right" />
           Add new space
         </span>
       )}
@@ -37,14 +45,11 @@ function NewSubMenu() {
         <SubMenuEditor
           handleSubmit={handleSubmit}
           handleOnBlur={exitEditMode}
+          error={error}
         />
       )}
     </MenuItem>
   );
 }
-
-const Icon = styled.i`
-  padding: ${({ padding }) => padding};
-`;
 
 export default NewSubMenu;

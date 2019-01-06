@@ -21,7 +21,16 @@ const GlobalStyle = createGlobalStyle`
     }
   
   h1, h2, h3, h4, h5, h6 {
-    color: ${({ theme }) => theme.color.primary}
+    color: ${({ theme }) => theme.color.primary};
+    /* give empty tags height because users might enter empty tags in the editor */
+    &:empty {
+      height: 1rem;
+    }
+  }
+
+  p:empty{
+    margin: 0;
+    height: 1rem;
   }
 
   .blockquote {

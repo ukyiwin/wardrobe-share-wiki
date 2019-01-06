@@ -1,46 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from 'react-router-dom';
+
 import Navigation from './navigation/Navigation';
-import theme from './theme';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './Home';
-import WikiSpace from './WikiSpace';
 import CreateWikipage from './editor/CreateWikipage';
 import EditWikipage from './editor/EditWikipage';
 import WikiPage from './WikiPage';
 import GlobalStyle from './GlobalStyle';
+import Alert from './common/Alert';
+
 import { MenuStateProvider } from './MenuStateContext';
+import theme from './theme';
 
 function App() {
+  const [error, setError] = useState(false);
+
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <Container>
+        <AppContainer>
           <MenuStateProvider>
             <Navigation />
-            <Route exact path="/" component={Home} />
-            <Switch>
-              <Route exact path="/:space" component={WikiSpace} />
-              <Route path="/:space/:space_id/new" component={CreateWikipage} />
-              <Route
-                path="/:space/:space_id/:wikipage_title/:wikipage_id/edit"
-                component={EditWikipage}
-              />
-              <Route
-                path="/:space/:space_id/:wikipage_title/:wikipage_id"
-                component={WikiPage}
-              />
-            </Switch>
+            <Container>
+              {error && <Alert invert>Oh no! An error occured!</Alert>}
+              <Switch>
+                <Route
+                  exact
+                  path="/"
+                  render={props => <Home {...props} setError={setError} />}
+                />
+                <Route
+                  path="/:space/:space_id/new"
+                  render={props => (
+                    <CreateWikipage {...props} setError={setError} />
+                  )}
+                />
+                <Route
+                  path="/:space/:space_id/:wikipage_title/:wikipage_id/edit"
+                  render={props => (
+                    <EditWikipage {...props} setError={setError} />
+                  )}
+                />
+                <Route
+                  path="/:space/:space_id/:wikipage_title/:wikipage_id"
+                  render={props => <WikiPage {...props} setError={setError} />}
+                />
+                <Redirect to="/" />
+              </Switch>
+            </Container>
             <GlobalStyle />
           </MenuStateProvider>
-        </Container>
+        </AppContainer>
       </ThemeProvider>
     </Router>
   );
 }
 
-const Container = styled.div`
+const AppContainer = styled.div`
   display: flex;
+`;
+
+const Container = styled.div`
+  padding: 2rem 3rem;
+  color: ${({ theme }) => theme.color.text};
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
 `;
 
 export default App;
