@@ -18,11 +18,12 @@ function NewSubMenu() {
   };
 
   const handleSubmit = async title => {
+    const space_title = !title ? 'no-title' : title;
     try {
-      const space_id = await createSpace(title);
+      const space_id = await createSpace(space_title);
       dispatch({
         type: 'CREATE_SPACE',
-        payload: { space_title: title, space_id }
+        payload: { space_title, space_id }
       });
     } catch {
       handleError(setError);

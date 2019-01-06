@@ -38,11 +38,13 @@ function SubMenuHeading({ displayMenu, space, toggleMenuDisplay }) {
   };
 
   const handleSubmit = async title => {
+    const newTitle = !title ? 'no-title' : title;
+
     try {
-      await updateSpace({ title, space_id });
+      await updateSpace({ title: newTitle, space_id });
       dispatch({
         type: 'UPDATE_SPACE',
-        payload: { space_id, space_title: title }
+        payload: { space_id, space_title: newTitle }
       });
       exitEditMode();
     } catch {
