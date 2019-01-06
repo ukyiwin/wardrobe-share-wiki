@@ -77,6 +77,8 @@ const Container = styled.div`
   padding: 2rem 3rem;
   color: ${({ theme }) => theme.color.text};
   width: 100%;
+  height: 100vh;
+  overflow-y: auto;
 `;
 
 const SettingsContainer = styled.ul`

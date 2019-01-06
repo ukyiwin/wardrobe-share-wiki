@@ -16,12 +16,13 @@ function WikiPageEditor({ match, history }) {
 
   const handlePublish = async () => {
     const content = convertDraftToJSON(editorState.getCurrentContent());
-    const id = await createPage({ title, content, space_id });
+    const newTitle = !title ? 'no-title' : title;
+    const id = await createPage({ title: newTitle, content, space_id });
     await dispatch({
       type: 'CREATE_PAGE',
-      payload: { title, space_id, id }
+      payload: { title: newTitle, space_id, id }
     });
-    history.push(`/${space_title}/${space_id}/${title}/${id}`);
+    history.push(`/${space_title}/${space_id}/${newTitle}/${id}`);
   };
   return (
     <Container>

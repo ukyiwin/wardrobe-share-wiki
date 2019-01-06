@@ -13,6 +13,7 @@ function WikiPageEditor(props) {
   const [title, setTitle] = useState('');
   const { match, history } = props;
   const { dispatch } = useContext(MenuStateContext);
+  const { space_title } = match.params;
   const id = parseInt(match.params.wikipage_id, 10);
   const space_id = parseInt(match.params.space_id, 10);
 
@@ -35,12 +36,13 @@ function WikiPageEditor(props) {
 
   const handlePublish = async () => {
     const content = convertDraftToJSON(editorState.getCurrentContent());
-    await updatePage({ title, content, id });
+    const newTitle = !title ? 'no-title' : title;
+    await updatePage({ title: newTitle, content, id });
     dispatch({
       type: 'UPDATE_PAGE',
-      payload: { title, space_id, id }
+      payload: { title: newTitle, space_id, id }
     });
-    history.push(`/${title}/${space_id}/${title}/${id}`);
+    history.push(`/${space_title}/${space_id}/${newTitle}/${id}`);
   };
 
   return (
