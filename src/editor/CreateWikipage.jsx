@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { EditorState } from 'draft-js';
-import { withRouter } from 'react-router';
 
 import Editor from './Editor';
 
@@ -43,4 +42,4 @@ function WikiPageEditor({ match, history, setError }) {
   );
 }
 
-export default withRouter(WikiPageEditor);
+export default WikiPageEditor;

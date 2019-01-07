@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import styled from 'styled-components';
 
 import MenuItem from './MenuItem';
 import SubMenuEditor from './SubMenuEditor';
@@ -33,14 +34,14 @@ function NewSubMenu() {
   return (
     <MenuItem>
       {!inEditMode && (
-        <span
+        <Container
           onClick={() => {
             setEditMode(true);
           }}
         >
           <Icon className="fas fa-plus" margin="right" />
           Add new space
-        </span>
+        </Container>
       )}
       {inEditMode && (
         <SubMenuEditor
@@ -52,5 +53,9 @@ function NewSubMenu() {
     </MenuItem>
   );
 }
+
+const Container = styled.span`
+  cursor: pointer;
+`;
 
 export default NewSubMenu;

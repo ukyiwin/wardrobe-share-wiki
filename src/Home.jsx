@@ -36,15 +36,15 @@ function Home({ setError }) {
     const readableDate = convertUTCToReadable(updated_at);
 
     return (
-      <Link key={i} to={`/${space_title}/${space_id}/${title}/${id}`}>
-        <PostContainer>
+      <PostContainer>
+        <Link key={i} to={`/${space_title}/${space_id}/${title}/${id}`}>
           <PageTitle>
             {space_title} > {title}
           </PageTitle>
           <Content>{summary}</Content>
-          <small>last updated: {readableDate}</small>
-        </PostContainer>
-      </Link>
+        </Link>
+        <small>last updated: {readableDate}</small>
+      </PostContainer>
     );
   });
 
@@ -65,7 +65,6 @@ const PageTitle = styled.h3`
 
 const Content = styled.p`
   margin: 0 0 0.2rem;
-  white-space: pre;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

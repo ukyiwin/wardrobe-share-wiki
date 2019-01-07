@@ -9,7 +9,7 @@ import Icon from './common/Icon';
 import { MenuStateContext } from './MenuStateContext';
 import { deletePage } from './api';
 
-function WikiPage({ match, history, title = '', handleError }) {
+function WikiPage({ match, history, title, handleError }) {
   const { dispatch } = useContext(MenuStateContext);
 
   const { space } = match.params;

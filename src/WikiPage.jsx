@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
 import redraft from 'redraft';
 
 import WikipageHeader from './WikipageHeader';
@@ -13,7 +12,11 @@ function WikiPage({ match, history, setError }) {
   const [pageData, setPageData] = useState({});
 
   const id = parseInt(match.params.wikipage_id, 10);
-  const { content = '', created_at = '', updated_at = '' } = pageData;
+  const {
+    content = { blocks: [] },
+    created_at = '',
+    updated_at = ''
+  } = pageData;
 
   const onError = () => {
     handleError(setError, history);
@@ -35,11 +38,7 @@ function WikiPage({ match, history, setError }) {
     [id]
   );
 
-  const renderWarning = () => {
-    return <div>This wikipage is empty or there was an error</div>;
-  };
-
-  const rendered = content ? redraft(content, renderers) : null;
+  const rendered = redraft(content, renderers);
   const readableCreatedDate = !created_at
     ? null
     : convertUTCToReadable(created_at);
@@ -54,7 +53,7 @@ function WikiPage({ match, history, setError }) {
         <p>created: {readableCreatedDate}</p>
         <p>last updated: {readableUpdatedDate}</p>
       </DateContainer>
-      {rendered ? rendered : renderWarning()}
+      {rendered}
     </>
   );
 }
@@ -64,4 +63,4 @@ const DateContainer = styled.div`
   justify-content: space-between;
 `;
 
-export default withRouter(WikiPage);
+export default WikiPage;

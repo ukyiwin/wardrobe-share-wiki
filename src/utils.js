@@ -41,10 +41,13 @@ export function convertUTCToReadable(UTC) {
 
 export function handleError(setError, history) {
   setError(true);
-  setTimeout(() => {
+
+  const delay = () => {
     setError(false);
     if (history) {
       history.push('/');
     }
-  }, 2500);
+  };
+
+  setTimeout(delay, 2500);
 }

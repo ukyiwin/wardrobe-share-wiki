@@ -68,10 +68,10 @@ function SubMenuHeading({ displayMenu, space, toggleMenuDisplay }) {
       {!inEditMode && (
         <>
           <Container onClick={toggleMenuDisplay}>
-            <span>
+            <Left>
               <Icon className={`fas fa-${iconClass}`} margin="right" />
               {space_title}
-            </span>
+            </Left>
             <Right className="right">
               <Icon
                 className="fas fa-pencil-alt"
@@ -91,6 +91,9 @@ function SubMenuHeading({ displayMenu, space, toggleMenuDisplay }) {
 const Right = styled.span`
   display: flex;
   visibility: hidden;
+`;
+const Left = styled.span`
+  cursor: pointer;
 `;
 
 const Container = styled.span`
