@@ -17,9 +17,14 @@ import Alert from './common/Alert';
 
 import { MenuStateProvider } from './MenuStateContext';
 import theme from './theme';
+import { handleError } from './utils';
 
 function App() {
   const [error, setError] = useState(false);
+
+  const HandleErrorAlert = history => {
+    handleError(setError, history);
+  };
 
   return (
     <Router>
@@ -33,23 +38,27 @@ function App() {
                 <Route
                   exact
                   path="/"
-                  render={props => <Home {...props} setError={setError} />}
+                  render={props => (
+                    <Home {...props} handleError={HandleErrorAlert} />
+                  )}
                 />
                 <Route
                   path="/:space/:space_id/new"
                   render={props => (
-                    <CreateWikipage {...props} setError={setError} />
+                    <CreateWikipage {...props} handleError={HandleErrorAlert} />
                   )}
                 />
                 <Route
                   path="/:space/:space_id/:wikipage_title/:wikipage_id/edit"
                   render={props => (
-                    <EditWikipage {...props} setError={setError} />
+                    <EditWikipage {...props} handleError={HandleErrorAlert} />
                   )}
                 />
                 <Route
                   path="/:space/:space_id/:wikipage_title/:wikipage_id"
-                  render={props => <WikiPage {...props} setError={setError} />}
+                  render={props => (
+                    <WikiPage {...props} handleError={HandleErrorAlert} />
+                  )}
                 />
                 <Redirect to="/" />
               </Switch>

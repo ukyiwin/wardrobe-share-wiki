@@ -6,9 +6,9 @@ import WikipageHeader from './WikipageHeader';
 
 import { loadPage } from './api';
 import renderers from './RenderStyles';
-import { convertUTCToReadable, handleError } from './utils';
+import { convertUTCToReadable } from './utils';
 
-function WikiPage({ match, history, setError }) {
+function WikiPage({ match, history, handleError }) {
   const [pageData, setPageData] = useState({});
 
   const id = parseInt(match.params.wikipage_id, 10);
@@ -19,7 +19,7 @@ function WikiPage({ match, history, setError }) {
   } = pageData;
 
   const onError = () => {
-    handleError(setError, history);
+    handleError(history);
   };
 
   const fetchPage = async id => {

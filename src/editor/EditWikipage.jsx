@@ -3,11 +3,11 @@ import { EditorState, convertFromRaw } from 'draft-js';
 
 import Editor from './Editor';
 
-import { convertDraftToJSON, handleError } from '../utils';
+import { convertDraftToJSON } from '../utils';
 import { MenuStateContext } from '../MenuStateContext';
 import { updatePage, loadPage } from '../api';
 
-function WikiPageEditor({ match, history, setError }) {
+function WikiPageEditor({ match, history, handleError }) {
   const [editorState, setEditor] = useState(EditorState.createEmpty());
   const [title, setTitle] = useState('');
   const { dispatch } = useContext(MenuStateContext);
@@ -25,7 +25,7 @@ function WikiPageEditor({ match, history, setError }) {
       const newEditorState = EditorState.createWithContent(rawDraft);
       setEditor(newEditorState);
     } catch {
-      handleError(setError, history);
+      handleError(history);
     }
   };
   useEffect(
@@ -49,7 +49,7 @@ function WikiPageEditor({ match, history, setError }) {
       });
       history.push(`/${space_title}/${space_id}/${newTitle}/${id}`);
     } catch {
-      handleError(setError);
+      handleError();
     }
   };
 

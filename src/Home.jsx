@@ -7,9 +7,8 @@ import PageHeader from './common/PageHeader';
 
 import { convertJSONtoPlainText, convertUTCToReadable } from './utils';
 import { loadPages } from './api';
-import { handleError } from './utils';
 
-function Home({ setError }) {
+function Home({ handleError }) {
   const [pages, setPages] = useState([]);
   const { state } = useContext(MenuStateContext);
 
@@ -18,7 +17,7 @@ function Home({ setError }) {
       const response = await loadPages(id);
       setPages(response);
     } catch {
-      handleError(setError);
+      handleError();
     }
   };
 

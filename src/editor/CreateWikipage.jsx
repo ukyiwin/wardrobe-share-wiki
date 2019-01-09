@@ -5,9 +5,9 @@ import Editor from './Editor';
 
 import { MenuStateContext } from '../MenuStateContext';
 import { createPage } from '../api';
-import { convertDraftToJSON, handleError } from '../utils';
+import { convertDraftToJSON } from '../utils';
 
-function WikiPageEditor({ match, history, setError }) {
+function WikiPageEditor({ match, history, handleError }) {
   const [editorState, setEditor] = useState(EditorState.createEmpty());
   const [title, setTitle] = useState('');
   const { dispatch } = useContext(MenuStateContext);
@@ -27,7 +27,7 @@ function WikiPageEditor({ match, history, setError }) {
       });
       history.push(`/${space_title}/${space_id}/${newTitle}/${id}`);
     } catch {
-      handleError(setError);
+      handleError();
     }
   };
 
